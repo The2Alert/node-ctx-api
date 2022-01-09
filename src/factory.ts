@@ -1,4 +1,4 @@
-import {ContextBaseClass, IContext, IService, PersonalFactory} from ".";
+import {ContextBaseClass, IContext, IService, PersonalFactory, Extension} from ".";
 
 export class Factory {
     public static isContext(contextClass: IContext): boolean {
@@ -25,9 +25,10 @@ export class Factory {
             throw new Error(JSON.stringify(serviceClass.name) + " class is not service");
     }
 
-    constructor(public rootContextClass: IContext) {}
+    constructor(public readonly rootContextClass: IContext, public readonly extensionsClasses: (typeof Extension)[] = []) {}
 
     private readonly personals: PersonalFactory[] = [];
+    private extensions?: Extension[];
 
     public createPersonalById<BaseClass extends ContextBaseClass>(id: number, params: ConstructorParameters<BaseClass>): PersonalFactory {
         const personal = new PersonalFactory(id);
@@ -41,7 +42,23 @@ export class Factory {
     }
 
     public removePersonalById(id: number): void {
+        const personal: PersonalFactory = this.getPersonalById(id);
+        personal.remove();
         delete this.personals[id];
+    }
+
+    public createExtensions(): void {
+        this.extensions = [];
+        for(let index = 0; index < this.extensionsClasses.length; index++) {
+            const extensionClass: typeof Extension = this.extensionsClasses[index];
+            const extension: Extension = new extensionClass(this);
+            extension.create();
+            this.extensions[index] = extension;
+        }
+    }
+
+    public getExtensions(): Extension[] {
+        return this.extensions ?? [];
     }
 
     public checkRootContext(): void {
@@ -50,5 +67,6 @@ export class Factory {
 
     public create(): void {
         this.checkRootContext();
+        this.createExtensions();
     }
 }

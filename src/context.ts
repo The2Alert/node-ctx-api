@@ -10,7 +10,10 @@ export interface IContext {
     contextServices?: IService[];
     new(...params: any[]): {
         __getters__?: Record<string, ContextGetter>;
+        handleContextCreate(): any;
         createContext(personalFactory: PersonalFactory, parent?: InstanceType<IContext>): void;
+        handleContextDestroy(): any;
+        destroyContext(): void;
         createServices(): void;
         initContextGetters(): void;
         getPersonalFactory(): PersonalFactory;
@@ -43,16 +46,30 @@ export function ContextMixin<BaseClass extends ContextBaseClass>(baseClass: Base
         public contextServices?: InstanceType<IService>[];
         public contextFrozen: boolean  = false;
 
+        public handleContextCreate(): any {}
+
         public createContext(personalFactory: PersonalFactory, parent?: InstanceType<IContext>): void {
             this.personalFactory = personalFactory;
             this.parentContext = parent;
             const contextClass = this.constructor as IContext;
             this.getPersonalFactory().getAllContexts()[contextClass.contextId] = this;
+            this.handleContextCreate();
             const {contextChildren} = contextClass;
             this.contextChildren = [];
             const factory: PersonalFactory = this.getPersonalFactory();
             for(const childClass of contextChildren)
                 this.contextChildren[childClass.contextId] = factory.createContext(childClass, this);
+        }
+
+        public handleContextDestroy(): any {}
+
+        public destroyContext(): void {
+            this.handleContextDestroy();
+            const children: InstanceType<IContext>[] = this.getContextChildren();
+            for(const childId in children) {
+                const child: InstanceType<IContext> = children[childId];
+                child.destroyContext();
+            }
         }
 
         public createServices(): void {

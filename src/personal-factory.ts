@@ -15,6 +15,15 @@ export class PersonalFactory {
         this.allContexts = [];
     }
 
+    public remove(): void {
+        const context: InstanceType<IContext> | null = this.getRootContext();
+        if(context !== null)
+            context.destroyContext();
+        delete this.factory;
+        delete this.contextParams;
+        delete this.allContexts;
+    }
+
     public createContext(contextClass: IContext, parent?: InstanceType<IContext>): InstanceType<IContext> {
         const context = new contextClass(...this.getContextParams());
         context.createContext(this, parent);

@@ -1,18 +1,22 @@
 {
   "name": "ctx-api",
-  "version": "1.0.0",
-  "description": "Context API.",
+  "version": "1.0.0-beta",
+  "description": "Approach that allows to implement a tree of classes.",
+  "keywords": ["context", "ctx", "api"],
+  "repository": "github:dev2alert/node-ctx-api",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "scripts": {
     "start": "cross-env NODE_ENV=production node .",
     "compile": "tsc",
     "dev": "cross-env NODE_ENV=development tsc-watch --onSuccess \"node .\""
   },
-  "repository": "github:dev2alert/context-api",
   "author": "dev2alert",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "@types/node": "^16.4.13",
     "tsc-watch": "^4.6.0"
   }
