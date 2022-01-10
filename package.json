@@ -1,6 +1,6 @@
 {
   "name": "ctx-api",
-  "version": "1.0.0-beta",
+  "version": "1.0.0",
   "description": "Approach that allows to implement a tree of classes.",
   "keywords": ["context", "ctx", "api"],
   "repository": "github:dev2alert/node-ctx-api",
