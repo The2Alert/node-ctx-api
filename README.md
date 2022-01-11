@@ -12,7 +12,7 @@
     <a href="https://www.npmjs.com/package/ctx-api"><img src="https://img.shields.io/npm/dm/ctx-api" /></a>
     <a href="https://github.com/dev2alert/node-ctx-api/blob/main/LICENSE"><img src="https://img.shields.io/github/license/dev2alert/node-ctx-api" /></a>
 </p>
-
+ 
 ## Description
 <p>
     This approach was implemented for <a href="https://github.com/dev2alert/node-samp">NodeSamp</a>.
