@@ -1,7 +1,7 @@
 import {Factory} from "./factory";
 
-export class Extension {
-    constructor(public readonly factory: Factory) {}
+export class Extension<F extends Factory> {
+    constructor(public readonly factory: F) {}
 
     public create(): void {}
 }

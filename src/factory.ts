@@ -28,7 +28,7 @@ export class Factory {
     constructor(public readonly rootContextClass: IContext, public readonly extensionsClasses: (typeof Extension)[] = []) {}
 
     private readonly personals: PersonalFactory[] = [];
-    private extensions?: Extension[];
+    private extensions?: Extension<this>[];
 
     public createPersonalById<BaseClass extends ContextBaseClass>(id: number, params: ConstructorParameters<BaseClass>): PersonalFactory {
         const personal = new PersonalFactory(id);
@@ -51,22 +51,17 @@ export class Factory {
         this.extensions = [];
         for(let index = 0; index < this.extensionsClasses.length; index++) {
             const extensionClass: typeof Extension = this.extensionsClasses[index];
-            const extension: Extension = new extensionClass(this);
+            const extension: Extension<this> = new extensionClass(this);
             extension.create();
             this.extensions[index] = extension;
         }
     }
 
-    public getExtensions(): Extension[] {
+    public getExtensions(): Extension<this>[] {
         return this.extensions ?? [];
     }
 
     public checkRootContext(): void {
         Factory.checkContext(this.rootContextClass);
-    }
-
-    public create(): void {
-        this.checkRootContext();
-        this.createExtensions();
     }
 }
